@@ -12,6 +12,20 @@ services:
     volumes:
       - mongo_data:/data/db
 
+  mongo-express:
+    image: mongo-express:1
+    container_name: comp3123_mongo_express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin
+    depends_on:
+      - mongo
+
   backend:
     build: ./backend
     container_name: comp3123_backend
@@ -27,19 +41,16 @@ services:
       - mongo
     volumes:
       - ./backend/uploads:/usr/src/app/uploads
-  
 
   frontend:
-    image: node:18
+    build: ./frontend
     container_name: comp3123_frontend
-    working_dir: /usr/src/app
-    volumes:
-      - ./frontend:/usr/src/app
+    restart: always
     ports:
       - "3000:3000"
-    command: npm start
     depends_on:
       - backend
 
 volumes:
   mongo_data:
+
