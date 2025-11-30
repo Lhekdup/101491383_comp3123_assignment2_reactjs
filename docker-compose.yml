@@ -1,0 +1,45 @@
+# docker-compose up --build
+
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: comp3123_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build: ./backend
+    container_name: comp3123_backend
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - DB_URL=mongodb://mongo:27017/comp3123_assignment2
+      - JWT_SECRET=super_secret_for_assignment_only
+      - CLIENT_ORIGIN=http://localhost:3000
+    depends_on:
+      - mongo
+    volumes:
+      - ./backend/uploads:/usr/src/app/uploads
+  
+
+  frontend:
+    image: node:18
+    container_name: comp3123_frontend
+    working_dir: /usr/src/app
+    volumes:
+      - ./frontend:/usr/src/app
+    ports:
+      - "3000:3000"
+    command: npm start
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
