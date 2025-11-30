@@ -35,9 +35,8 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
-  // New field for Assignment 2
   profile_image: {
-    type: String, // store URL/path like "/uploads/xyz.jpg"
+    type: String, // store URL/path like "/uploads/picture.jpg"
     default: null
   },
   created_at: {

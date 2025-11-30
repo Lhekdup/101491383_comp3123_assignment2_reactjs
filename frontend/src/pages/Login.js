@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api/api';
 
-function Login() {
+function Login({ setIsAuthenticated }) {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -28,6 +28,8 @@ function Login() {
       // this saves token in localStorage
       localStorage.setItem('token', res.data.token);
 
+      setIsAuthenticated(true);
+      
       // this redirect to employee list
       navigate('/employees');
     } catch (err) {

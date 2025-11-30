@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 
-function Navbar() {
+function Navbar({ setIsAuthenticated }) {
   const logout = () => {
-    localStorage.removeItem('token');
-    window.location.href = '/login';
-  };
+  localStorage.removeItem('token');
+  setIsAuthenticated(false);
+  window.location.href = '/login';
+};
 
   return (
     <nav style={{ padding: 10, background: '#222' }}>
